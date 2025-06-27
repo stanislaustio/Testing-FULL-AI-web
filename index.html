@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcureactor Biofuel- AI | Simulator Bioreaktor Biofuel Mikroalga</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- SheetJS Library for reading Excel files -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-gradient-text {
+            background: linear-gradient(to right, #14b8a6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .choice-card {
+            @apply bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-teal-400 hover:bg-gray-900/50 cursor-pointer transition-all duration-300 text-center;
+        }
+        .result-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .param-highlight {
+            color: #2dd4bf; /* teal-400 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Header / Navigasi -->
+    <header class="bg-gray-900/80 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-gray-700/50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">
+                Calcureactor Biofuel-<span class="text-teal-400">AI</span>
+            </h1>
+            <nav>
+                <a href="#pilih-simulator" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-5 py-2 rounded-lg transition-colors duration-300">
+                    Mulai
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="pt-24">
+        <section id="hero" class="text-center py-20 sm:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4">
+                    Simulator Bioreaktor Biofuel Mikroalga berbasis AI
+                </h2>
+                <h3 class="text-5xl md:text-7xl font-bold hero-gradient-text mb-6">
+                    Temukan Rekomendasi Kombinasi & Dapatkan Hasil Prediksi
+                </h3>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+                    Prediksi hasil dari parameter input, atau temukan kombinasi parameter ideal untuk mencapai target produksi Anda.
+                </p>
+                <a href="#pilih-simulator" class="bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg px-8 py-4 rounded-lg transition-colors duration-300 inline-block">
+                    Mulai Sekarang
+                </a>
+            </div>
+        </section>
+
+        <!-- Cara Kerja Section -->
+        <section id="how-it-works" class="py-20 bg-gray-800/50">
+             <div class="container mx-auto px-6 text-center">
+                <h3 class="text-3xl font-bold text-white mb-2">Bagaimana Cara Kerjanya?</h3>
+                <div class="grid md:grid-cols-3 gap-8 mt-12 max-w-5xl mx-auto">
+                    <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                        <div class="text-4xl text-teal-400 mb-4">①</div>
+                        <h4 class="text-xl font-semibold text-white mb-2">Unggah Data Anda</h4>
+                        <p class="text-gray-400">Gunakan data riset Anda sendiri dalam format .xlsx untuk hasil yang lebih personal.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                        <div class="text-4xl text-teal-400 mb-4">②</div>
+                        <h4 class="text-xl font-semibold text-white mb-2">Pilih Mode</h4>
+                        <p class="text-gray-400">Pilih antara memprediksi hasil dari parameter atau mencari parameter dari hasil.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-xl border border-gray-700">
+                        <div class="text-4xl text-teal-400 mb-4">③</div>
+                        <h4 class="text-xl font-semibold text-white mb-2">Dapatkan Wawasan</h4>
+                        <p class="text-gray-400">Lihat prediksi atau rekomendasi berdasarkan data yang paling cocok dari database Anda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pilihan Simulator Section -->
+        <section id="pilih-simulator" class="py-20">
+            <div class="container mx-auto px-6 max-w-4xl">
+                 <!-- Langkah 1: Upload Dataset -->
+                <div class="bg-gray-800 border border-gray-700 rounded-xl p-8 mb-12">
+                     <h3 class="text-2xl font-bold text-white mb-2 text-center"><span class="text-teal-400">Langkah 1:</span> Siapkan Database Anda</h3>
+                     <p class="text-center text-gray-400 mb-6">Unggah file .xlsx Anda. Jika tidak, data default akan digunakan.</p>
+                     <div class="max-w-xl mx-auto">
+                         <label for="file-upload" class="block mb-2 text-sm font-medium text-gray-300">Unggah File Excel (.xlsx)</label>
+                         <input type="file" id="file-upload" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-700 file:text-teal-300 hover:file:bg-gray-600 cursor-pointer">
+                         <p class="mt-2 text-xs text-gray-500">Pastikan file Excel memiliki : <br><code class="text-teal-500">Parameter : suhu, cahaya, ph, co2, nitrogen. Output : Biomassa & %lipid</code></p>
+                         <div id="message-box-upload" class="hidden mt-4 p-3 text-sm text-center rounded-lg" role="alert"></div>
+                     </div>
+                </div>
+
+                <!-- Langkah 2: Pilih Mode -->
+                <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-8">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-2"><span class="text-teal-400">Langkah 2:</span> Pilih Mode Simulator</h3>
+                        <p class="text-gray-400">Pilih tujuan yang ingin Anda capai dengan data tersebut.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div id="btn-to-forward" class="choice-card">
+                            <h4 class="text-2xl font-bold text-white mb-3">Prediksi Hasil</h4>
+                            <p class="text-gray-400">Temukan hasil prediksi Biomassa(g/L) dan %lipid berdasarkan parameter yang kamu masukan <span class="font-semibold text-white">-> Coba Sekarang </span>.</p>
+                        </div>
+                        <div id="btn-to-reverse" class="choice-card">
+                            <h4 class="text-2xl font-bold text-white mb-3">Cari Parameter</h4>
+                            <p class="text-gray-400">Temukan hasil rekomendasi kombinasi parameter berdasarkan jumlah biomassa(g/L) dan %lipid yang diiginkan  <span class="font-semibold text-gray-200">-> Coba Sekarang </span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- A: Simulator Prediksi Hasil dari Parameter (FORWARD) -->
+        <section id="simulator-forward" class="hidden py-20">
+             <div class="container mx-auto px-6">
+                <button class="back-to-choice-btn mb-8 text-teal-400 hover:text-teal-300">&larr; Kembali ke Pilihan Mode</button>
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold text-white mb-2">Simulator Prediksi Hasil</h3>
+                    <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Masukkan parameter untuk mendapatkan prediksi hasil.</p>
+                </div>
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+                    <!-- Kolom Input -->
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 space-y-5">
+                        <h4 class="text-2xl font-semibold text-white mb-4">Parameter Input</h4>
+                        <div><label for="suhu" class="block mb-2 text-sm font-medium text-gray-300">Suhu (°C)</label><input type="number" id="suhu" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 25" required></div>
+                        <div><label for="cahaya" class="block mb-2 text-sm font-medium text-gray-300">Intensitas Cahaya (lux)</label><input type="number" id="cahaya" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 8000" required></div>
+                        <div><label for="ph" class="block mb-2 text-sm font-medium text-gray-300">Tingkat pH</label><input type="number" step="0.1" id="ph" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 7.5" required></div>
+                        <div><label for="co2" class="block mb-2 text-sm font-medium text-gray-300">Konsentrasi CO₂ (%)</label><input type="number" step="0.1" id="co2" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 2.0" required></div>
+                        <div><label for="nitrogen" class="block mb-2 text-sm font-medium text-gray-300">Konsentrasi Nitrogen (mg/L)</label><input type="number" step="0.1" id="nitrogen" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 70" required></div>
+                        <button id="predict-btn-forward" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg px-8 py-3 rounded-lg transition-colors duration-300 mt-4">Prediksi Hasil</button>
+                    </div>
+                    <!-- Kolom Output -->
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
+                        <div class="space-y-6">
+                            <div id="message-box-error-forward" class="hidden p-4 text-sm text-yellow-200 rounded-lg bg-yellow-900/50" role="alert"></div>
+                            <h4 class="text-2xl font-semibold text-white mb-4 text-center">Hasil Prediksi</h4>
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div class="bg-gray-700/50 p-6 rounded-xl text-center result-card"><h5 class="text-lg font-semibold text-gray-400 mb-2">Prediksi Biomassa</h5><p id="biomassa-output" class="text-4xl font-bold text-cyan-400">--- g/L</p></div>
+                                <div class="bg-gray-700/50 p-6 rounded-xl text-center result-card"><h5 class="text-lg font-semibold text-gray-400 mb-2">Prediksi Persen Lipid</h5><p id="lipid-output" class="text-4xl font-bold text-teal-400">--- %</p></div>
+                            </div>
+                            <div id="match-card-forward" class="bg-gray-700/50 p-6 rounded-xl border border-dashed border-gray-600 result-card hidden">
+                                <h5 class="text-md font-semibold text-gray-300 mb-3">Prediksi Berdasarkan Data Terdekat:</h5>
+                                <p id="match-details-forward" class="text-gray-400 text-sm space-y-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B: Simulator Pencari Parameter dari Hasil (REVERSE) -->
+        <section id="simulator-reverse" class="hidden py-20">
+             <div class="container mx-auto px-6">
+                 <button class="back-to-choice-btn mb-8 text-teal-400 hover:text-teal-300">&larr; Kembali ke Pilihan Mode</button>
+                 <div class="text-center">
+                    <h3 class="text-3xl font-bold text-white mb-2">Simulator Pencari Parameter</h3>
+                    <p class="text-gray-400 mb-12 max-w-2xl mx-auto">Masukkan target hasil untuk mendapatkan rekomendasi parameter.</p>
+                </div>
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+                    <!-- Kolom Input -->
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 space-y-5">
+                        <h4 class="text-2xl font-semibold text-white mb-4">Target Hasil</h4>
+                        <p class="text-sm text-gray-400 -mt-3">Anda bisa mengisi salah satu atau keduanya.</p>
+                        <div><label for="target-biomassa" class="block mb-2 text-sm font-medium text-gray-300">Biomassa yang Diinginkan (g/L)</label><input type="number" step="0.1" id="target-biomassa" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5" placeholder="Contoh: 1.3"></div>
+                        <div><label for="target-lipid" class="block mb-2 text-sm font-medium text-gray-300">Persen Lipid yang Diinginkan (%)</label><input type="number" step="0.1" id="target-lipid" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Contoh: 30"></div>
+                        <button id="predict-btn-reverse" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg px-8 py-3 rounded-lg transition-colors duration-300 mt-4">Cari Kombinasi Parameter</button>
+                    </div>
+                    <!-- Kolom Output -->
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
+                        <div class="space-y-6">
+                            <div id="message-box-error-reverse" class="hidden p-4 text-sm text-yellow-200 rounded-lg bg-yellow-900/50" role="alert"></div>
+                            <h4 class="text-2xl font-semibold text-white mb-4 text-center">Rekomendasi Parameter</h4>
+                            <div id="match-card-reverse" class="bg-gray-700/50 p-6 rounded-xl border border-dashed border-gray-600 result-card hidden">
+                                <h5 class="text-md font-semibold text-gray-300 mb-3">Kombinasi Parameter Terdekat dari Database:</h5>
+                                <div id="match-details-reverse" class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center mt-4"></div>
+                                <hr class="border-gray-600 my-4">
+                                <p class="text-sm text-center text-gray-400">Hasil aktual dari data ini: <span id="actual-result-reverse" class="font-semibold text-white"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800/50 border-t border-gray-700/50 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p>&copy; 2024 Biofuel-AI. Dibuat berdasarkan proyek AI dari Google Colab.</p>
+            <p>Sebuah demonstrasi Web oleh Gemini.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Referensi Elemen DOM Global ---
+        const choiceSection = document.getElementById('pilih-simulator');
+        const forwardSimulatorSection = document.getElementById('simulator-forward');
+        const reverseSimulatorSection = document.getElementById('simulator-reverse');
+        const btnToForward = document.getElementById('btn-to-forward');
+        const btnToReverse = document.getElementById('btn-to-reverse');
+        const backToChoiceBtns = document.querySelectorAll('.back-to-choice-btn');
+        const fileUpload = document.getElementById('file-upload');
+        const uploadMessageBox = document.getElementById('message-box-upload');
+        
+        // --- DATABASE RISET (Data Default) ---
+        let defaultDataset = [
+            { suhu: 25, cahaya: 8100, ph: 7.5, co2: 2, nitrogen: 70, biomassa: 1.25, lipid: 22.3 }, { suhu: 30, cahaya: 10800, ph: 8.0, co2: 3, nitrogen: 56, biomassa: 1.40, lipid: 25.1 }, { suhu: 20, cahaya: 5400, ph: 7.0, co2: 1, nitrogen: 84, biomassa: 0.95, lipid: 18.5 }, { suhu: 28, cahaya: 9720, ph: 8.2, co2: 2.5, nitrogen: 42, biomassa: 1.35, lipid: 30.2 }, { suhu: 22, cahaya: 6480, ph: 7.8, co2: 1.5, nitrogen: 28, biomassa: 1.10, lipid: 35.8 }, { suhu: 32, cahaya: 13500, ph: 7.5, co2: 4, nitrogen: 70, biomassa: 1.15, lipid: 24.0 }, { suhu: 26, cahaya: 8640, ph: 8.5, co2: 2.2, nitrogen: 98, biomassa: 1.30, lipid: 19.9 }, { suhu: 29, cahaya: 11880, ph: 7.9, co2: 3.5, nitrogen: 14, biomassa: 1.05, lipid: 42.5 },
+        ];
+        let dataset = [...defaultDataset]; // Awalnya, dataset aktif adalah salinan dari data default
+
+        // --- Fungsi untuk menampilkan pesan ---
+        function showUploadMessage(message, isError = false) {
+            uploadMessageBox.textContent = message;
+            uploadMessageBox.classList.remove('hidden', 'bg-green-900/50', 'text-green-200', 'bg-yellow-900/50', 'text-yellow-200');
+            if (isError) {
+                uploadMessageBox.classList.add('bg-yellow-900/50', 'text-yellow-200');
+            } else {
+                uploadMessageBox.classList.add('bg-green-900/50', 'text-green-200');
+            }
+        }
+        
+        // --- FUNGSI PARSING & UPLOAD FILE ---
+        fileUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const newDataset = XLSX.utils.sheet_to_json(worksheet);
+
+                    if (newDataset.length > 0 && 'biomassa' in newDataset[0] && 'suhu' in newDataset[0]) {
+                        dataset = newDataset;
+                        sessionStorage.setItem('userDataset', JSON.stringify(dataset));
+                        showUploadMessage(`Berhasil! ${newDataset.length} baris data dari "${file.name}" telah dimuat dan disimpan di sesi ini.`);
+                    } else { throw new Error('Format Excel tidak valid atau header tidak cocok.'); }
+                } catch (error) {
+                    showUploadMessage(`Gagal memuat file. Error: ${error.message}`, true);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        // --- Cek Session Storage saat halaman dimuat ---
+        window.addEventListener('load', () => {
+            const storedData = sessionStorage.getItem('userDataset');
+            if (storedData) {
+                try {
+                    dataset = JSON.parse(storedData);
+                    showUploadMessage(`Database kustom dari sesi sebelumnya telah dimuat kembali. (${dataset.length} baris)`);
+                } catch (e) {
+                    dataset = [...defaultDataset]; // Jika data rusak, kembali ke default
+                    sessionStorage.removeItem('userDataset');
+                }
+            }
+        });
+        
+        // --- FUNGSI NAVIGASI ---
+        function showSection(sectionToShow) {
+            choiceSection.classList.add('hidden');
+            forwardSimulatorSection.classList.add('hidden');
+            reverseSimulatorSection.classList.add('hidden');
+            sectionToShow.classList.remove('hidden');
+            window.scrollTo({ top: sectionToShow.offsetTop - 100, behavior: 'smooth' });
+        }
+        btnToForward.addEventListener('click', () => showSection(forwardSimulatorSection));
+        btnToReverse.addEventListener('click', () => showSection(reverseSimulatorSection));
+        backToChoiceBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Sembunyikan semua section simulator
+                forwardSimulatorSection.classList.add('hidden');
+                reverseSimulatorSection.classList.add('hidden');
+                // Tampilkan lagi section pilihan
+                choiceSection.classList.remove('hidden');
+                window.scrollTo({ top: choiceSection.offsetTop - 100, behavior: 'smooth' });
+            });
+        });
+
+        // --- LOGIKA SIMULATOR FORWARD ---
+        (function setupForwardSimulator() {
+            const predictBtn = document.getElementById('predict-btn-forward');
+            const inputs = { suhu: document.getElementById('suhu'), cahaya: document.getElementById('cahaya'), ph: document.getElementById('ph'), co2: document.getElementById('co2'), nitrogen: document.getElementById('nitrogen'), };
+            const outputs = { biomassa: document.getElementById('biomassa-output'), lipid: document.getElementById('lipid-output'), matchCard: document.getElementById('match-card-forward'), matchDetails: document.getElementById('match-details-forward'), errorBox: document.getElementById('message-box-error-forward') };
+
+            predictBtn.addEventListener('click', () => {
+                const userInput = {};
+                for (const key in inputs) {
+                    const val = parseFloat(inputs[key].value);
+                    if (isNaN(val)) { outputs.errorBox.textContent = 'Harap isi semua kolom input dengan angka yang valid.'; outputs.errorBox.classList.remove('hidden'); return; }
+                    userInput[key] = val;
+                }
+                outputs.errorBox.classList.add('hidden');
+                
+                const match = findClosestMatchByParams(userInput);
+                outputs.biomassa.textContent = `${match.biomassa.toFixed(2)} g/L`;
+                outputs.lipid.textContent = `${match.lipid.toFixed(2)} %`;
+                outputs.matchDetails.innerHTML = `Suhu: <span class="param-highlight">${match.suhu}°C</span> | Cahaya: <span class="param-highlight">${match.cahaya} lux</span> | pH: <span class="param-highlight">${match.ph}</span> | CO₂: <span class="param-highlight">${match.co2}%</span> | Nitrogen: <span class="param-highlight">${match.nitrogen} mg/L</span>`;
+                outputs.matchCard.classList.remove('hidden');
+            });
+        })();
+        
+        function findClosestMatchByParams(userInput) {
+            let bestMatch = null, minDistance = Infinity;
+            const ranges = { suhu: {min:Infinity,max:-Infinity}, cahaya:{min:Infinity,max:-Infinity}, ph:{min:Infinity,max:-Infinity}, co2:{min:Infinity,max:-Infinity}, nitrogen:{min:Infinity,max:-Infinity} };
+            const normalize = (value, key, ranges) => (value - ranges[key].min) / (ranges[key].max - ranges[key].min || 1);
+            dataset.forEach(entry => { for (const key in ranges) { ranges[key].min = Math.min(ranges[key].min, entry[key]); ranges[key].max = Math.max(ranges[key].max, entry[key]); }});
+            dataset.forEach(entry => {
+                let d = 0;
+                for (const key in userInput) { d += Math.pow(normalize(userInput[key], key, ranges) - normalize(entry[key], key, ranges), 2); }
+                if (d < minDistance) { minDistance = d; bestMatch = entry; }
+            });
+            return bestMatch;
+        }
+
+        // --- LOGIKA SIMULATOR REVERSE ---
+        (function setupReverseSimulator() {
+            const predictBtn = document.getElementById('predict-btn-reverse');
+            const inputs = { biomassa: document.getElementById('target-biomassa'), lipid: document.getElementById('target-lipid'), };
+            const outputs = { matchCard: document.getElementById('match-card-reverse'), matchDetails: document.getElementById('match-details-reverse'), actualResult: document.getElementById('actual-result-reverse'), errorBox: document.getElementById('message-box-error-reverse') };
+
+            predictBtn.addEventListener('click', () => {
+                const targetBiomassa = parseFloat(inputs.biomassa.value);
+                const targetLipid = parseFloat(inputs.lipid.value);
+                if (isNaN(targetBiomassa) && isNaN(targetLipid)) { outputs.errorBox.textContent = 'Harap isi setidaknya satu kolom target hasil.'; outputs.errorBox.classList.remove('hidden'); return; }
+                outputs.errorBox.classList.add('hidden');
+                
+                const match = findClosestMatchByResults({ biomassa: targetBiomassa, lipid: targetLipid });
+                outputs.matchDetails.innerHTML = `<div class="bg-gray-700 p-3 rounded-lg"><div class="text-xs text-gray-400">Suhu</div><div class="text-xl font-bold">${match.suhu}°C</div></div><div class="bg-gray-700 p-3 rounded-lg"><div class="text-xs text-gray-400">Cahaya</div><div class="text-xl font-bold">${match.cahaya} lux</div></div><div class="bg-gray-700 p-3 rounded-lg"><div class="text-xs text-gray-400">pH</div><div class="text-xl font-bold">${match.ph}</div></div><div class="bg-gray-700 p-3 rounded-lg"><div class="text-xs text-gray-400">CO₂</div><div class="text-xl font-bold">${match.co2}%</div></div><div class="bg-gray-700 p-3 rounded-lg col-span-2 sm:col-span-1"><div class="text-xs text-gray-400">Nitrogen</div><div class="text-xl font-bold">${match.nitrogen} mg/L</div></div>`;
+                outputs.actualResult.innerHTML = `<span class="text-cyan-400">${match.biomassa.toFixed(2)} g/L</span> & <span class="text-teal-400">${match.lipid.toFixed(2)}%</span>`;
+                outputs.matchCard.classList.remove('hidden');
+            });
+        })();
+
+        function findClosestMatchByResults(targets) {
+            let bestMatch = null, minDistance = Infinity;
+            const ranges = { biomassa: {min:Infinity,max:-Infinity}, lipid:{min:Infinity,max:-Infinity} };
+            const normalize = (value, key, ranges) => (value - ranges[key].min) / (ranges[key].max - ranges[key].min || 1);
+            dataset.forEach(entry => { for (const key in ranges) { ranges[key].min = Math.min(ranges[key].min, entry[key]); ranges[key].max = Math.max(ranges[key].max, entry[key]); }});
+            dataset.forEach(entry => {
+                let d = 0;
+                if (!isNaN(targets.biomassa)) { d += Math.pow(normalize(targets.biomassa, 'biomassa', ranges) - normalize(entry.biomassa, 'biomassa', ranges), 2); }
+                if (!isNaN(targets.lipid)) { d += Math.pow(normalize(targets.lipid, 'lipid', ranges) - normalize(entry.lipid, 'lipid', ranges), 2); }
+                if (d < minDistance) { minDistance = d; bestMatch = entry; }
+            });
+            return bestMatch;
+        }
+    </script>
+</body>
+</html>
